@@ -1,52 +1,53 @@
 package com.proartz;
 
 import javax.swing.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class View extends JPanel
-        implements ItemListener {
+public class View {
 
+    private JFrame frame;
+    private JPanel contentPane;
     private List<JToggleButton> buttons;
-    private int numberOfButtons = 50;
-    private Model model;
 
     public View() {
-        model = new Model();
-        buttons = createButtons(numberOfButtons);
+        frame = new JFrame("Testing Buttons");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        for(JToggleButton button : buttons) {
-            button.addItemListener(this);
-            add(button);
-        }
+        contentPane = new JPanel();
+        contentPane.setOpaque(true);
+
+        frame.setContentPane(contentPane);
+
+        buttons = new ArrayList<JToggleButton>();
     }
 
-    @Override
-    public void itemStateChanged(ItemEvent e) {
-        Object source = e.getItemSelectable();
-        if (e.getStateChange() == ItemEvent.SELECTED) {
-            if (model.getSelectionCounter() < 2) {
-                model.incrementCounter();
-            } else {
-                for(JToggleButton button : buttons) {
-                    button.setSelected(false);
-                }
-                model.resetCounter();
-            }
-        }
+    public void showFrame() {
+        frame.pack();
+        frame.setVisible(true);
     }
 
-    public List<JToggleButton> createButtons(int numberOfButtons) {
-        List<JToggleButton> buttons = new ArrayList<JToggleButton>();
-
-        for(int i = 0; i < numberOfButtons; i++) {
-            JToggleButton button = new JToggleButton();
-            button.setIcon(new ImageIcon("images/ufo-flying.png"));
-            button.setSelectedIcon(new ImageIcon("images/ufo.png"));
-            buttons.add(button);
-        }
+    public List<JToggleButton> getButtons() {
         return buttons;
+    }
+
+    public void setButtons(List<JToggleButton> buttons) {
+        this.buttons = buttons;
+    }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
+    public JPanel getContentPane() {
+        return contentPane;
+    }
+
+    public void setContentPane(JPanel contentPane) {
+        this.contentPane = contentPane;
     }
 }

@@ -2,17 +2,19 @@ package com.proartz;
 
 public class Model {
     private int selectionCounter;
+    private int numberOfButtons;
 
     public Model() {
-        this.selectionCounter = 0;
+        selectionCounter = 0;
+        numberOfButtons = 50;
     }
 
     public void incrementCounter() {
-        this.selectionCounter++;
+        selectionCounter++;
     }
 
     public void resetCounter() {
-        this.selectionCounter = 0;
+        selectionCounter = 0;
     }
 
     public int getSelectionCounter() {
@@ -21,5 +23,13 @@ public class Model {
 
     public void setSelectionCounter(int selectionCounter) {
         this.selectionCounter = selectionCounter;
+    }
+
+    public int getNumberOfButtons() {
+        return numberOfButtons;
+    }
+
+    public void setNumberOfButtons(int numberOfButtons) {
+        this.numberOfButtons = numberOfButtons;
     }
 }
