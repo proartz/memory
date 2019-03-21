@@ -31,23 +31,7 @@ public class View {
         return buttons;
     }
 
-    public void setButtons(List<JToggleButton> buttons) {
-        this.buttons = buttons;
-    }
-
-    public JFrame getFrame() {
-        return frame;
-    }
-
-    public void setFrame(JFrame frame) {
-        this.frame = frame;
-    }
-
     public JPanel getContentPane() {
         return contentPane;
-    }
-
-    public void setContentPane(JPanel contentPane) {
-        this.contentPane = contentPane;
     }
 }
