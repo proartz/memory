@@ -28,8 +28,16 @@ public class Controller {
     }
 
     public void createButtons(int numberOfButtons) {
-        List<JToggleButton> buttons = view.getButtons();
-        JPanel contentPane = view.getContentPane();
+        //check is numberOfButtons a square number
+        //so we can have square board(rows == columns)
+        if(Math.sqrt(numberOfButtons) % 1 != 0) {
+            System.err.println("Error: numberOfRows need to be a square of an integer :(");
+        }
+
+        int numberOfRows = (int)Math.sqrt(numberOfButtons);
+        int numberOfColumns = numberOfRows;
+
+        Board board = model.getBoard();
 
         ArrayList<String> icons = loadIcons();
 
@@ -38,30 +46,36 @@ public class Controller {
             System.exit(-1);
         }
 
-        for(int i = 0; i < numberOfButtons; i++) {
-            JToggleButton button = new JToggleButton();
-            button.setIcon(new ImageIcon("images/037-ufo-flying.png"));
-            button.setSelectedIcon(new ImageIcon(icons.get(i)));
+        List<JToggleButton> buttons = view.getButtons();
+        JPanel contentPane = view.getContentPane();
 
-            button.addItemListener(new ItemListener() {
-                @Override
-                public void itemStateChanged(ItemEvent e) {
-                    Object source = e.getItemSelectable();
-                    if (e.getStateChange() == ItemEvent.SELECTED) {
-                        if (model.getSelectionCounter() < 2) {
-                            model.incrementCounter();
-                        } else {
-                            for(JToggleButton button : view.getButtons()) {
-                                button.setSelected(false);
+        for(int i = 0; i < numberOfRows; i++) {
+            for(int j = 0; j < numberOfColumns; j++) {
+
+                JToggleButton button = new JToggleButton();
+                button.setIcon(new ImageIcon("images/037-ufo-flying.png"));
+                button.setSelectedIcon(new ImageIcon(icons.get(i)));
+
+                button.addItemListener(new ItemListener() {
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        Object source = e.getItemSelectable();
+                        if (e.getStateChange() == ItemEvent.SELECTED) {
+                            if (model.getSelectionCounter() < 2) {
+                                model.incrementCounter();
+                            } else {
+                                for (JToggleButton button : view.getButtons()) {
+                                    button.setSelected(false);
+                                }
+                                model.resetCounter();
                             }
-                            model.resetCounter();
                         }
                     }
-                }
-            });
-
-            buttons.add(button);
-            contentPane.add(button);
+                });
+                board.bindTile(i, j, (Object) button);
+                buttons.add(button);
+                contentPane.add(button);
+            }
         }
     }
 
