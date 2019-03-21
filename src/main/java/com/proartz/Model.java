@@ -10,7 +10,7 @@ public class Model<T> {
 
     public Model() {
         selectionCounter = 0;
-        numberOfTiles = 50;
+        numberOfTiles = 64;
         toGuess = numberOfTiles / 2;
         board = new Board(numberOfTiles);
         selectedTile1 = new Tile(null);
@@ -31,6 +31,10 @@ public class Model<T> {
 
     public int getSelectionCounter() {
         return selectionCounter;
+    }
+
+    public void setSelectionCounter(int selectionCounter) {
+        this.selectionCounter = selectionCounter;
     }
 
     public int getNumberOfTiles() {

@@ -41,12 +41,7 @@ public class Controller {
 
         Board board = model.getBoard();
 
-        ArrayList<String> icons = loadIcons();
-
-        if((icons.size() * 2) < numberOfButtons) {
-            System.err.println("Error: We don't have enough images :(");
-            System.exit(-1);
-        }
+        ArrayList<String> icons = loadIcons(numberOfButtons / 2);
 
         List<JToggleButton> buttons = view.getButtons();
         JPanel contentPane = view.getContentPane();
@@ -70,35 +65,30 @@ public class Controller {
                         if (e.getStateChange() == ItemEvent.SELECTED) {
                             if (model.getSelectionCounter() == 0) {
                                 model.incrementCounter();
-                                model.getSelectedTile1().setReference(e);
+                                model.getSelectedTile1().setReference(source);
                             }
                             else if(model.getSelectionCounter() == 1) {
                                 model.incrementCounter();
-                                model.getSelectedTile2().setReference(e);
+                                model.getSelectedTile2().setReference(source);
 
-                                if(compareTiles()) {
+                                if (compareTiles()) {
                                     model.decrementToGuess();
 
-                                    if(model.getToGuess() == 0) {
+                                    if (model.getToGuess() == 0) {
                                         System.out.println("Gratuluję!!! Wygrałeś!!!");
                                     }
-                                } else {
-                                    resetButtonSelection();
-                                }
-                                model.resetCounter();
-                                model.setSelectedTile1(null);
-                                model.setSelectedTile2(null);
-
-                            }
-                            if (e.getStateChange() == ItemEvent.SELECTED) {
-                                if (model.getSelectionCounter() < 2) {
-                                    model.incrementCounter();
-                                } else {
-                                    for (JToggleButton button : view.getButtons()) {
-                                        button.setSelected(false);
-                                    }
                                     model.resetCounter();
+                                    model.getSelectedTile1().setReference(null);
+                                    model.getSelectedTile2().setReference(null);
                                 }
+                            } else if(model.getSelectionCounter() == 2) {
+                                resetButtonSelection();
+                                model.getSelectedTile1().setReference(null);
+                                model.getSelectedTile2().setReference(null);
+
+
+                                model.setSelectionCounter(1);
+                                model.getSelectedTile1().setReference(source);
                             }
                         }
                     }
@@ -110,7 +100,7 @@ public class Controller {
         }
     }
 
-    private ArrayList<String> loadIcons() {
+    private ArrayList<String> loadIcons(int numberOfIcons) {
         ArrayList<String> icons = new ArrayList<String>();
 
         String dirName = "images/";
@@ -118,12 +108,12 @@ public class Controller {
         File fileName = new File(dirName);
         File[] fileList = fileName.listFiles();
 
-        for (File file: fileList) {
+        for (int i = 0; i < numberOfIcons; i++) {
 //            System.out.println(file);
 
             //add icon twice
-            icons.add(file.toString());
-            icons.add(file.toString());
+            icons.add(fileList[i].toString());
+            icons.add(fileList[i].toString());
         }
         Collections.shuffle(icons);
 
@@ -134,7 +124,9 @@ public class Controller {
         JToggleButton button1 = (JToggleButton)model.getSelectedTile1().getReference();
         JToggleButton button2 = (JToggleButton)model.getSelectedTile2().getReference();
 
-        return  button1.getSelectedIcon().equals(button2.getSelectedIcon());
+        String description1 = ((ImageIcon)button1.getSelectedIcon()).getDescription();
+        String description2 = ((ImageIcon)button2.getSelectedIcon()).getDescription();
+        return description1.equals(description2);
     }
 
     public void resetButtonSelection() {
