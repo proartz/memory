@@ -56,6 +56,7 @@ public class Controller {
                 JToggleButton button = new JToggleButton();
                 button.setIcon(new ImageIcon("images/037-ufo-flying.png"));
                 button.setSelectedIcon(new ImageIcon(icons.get(iconCounter)));
+                button.setDisabledSelectedIcon(new ImageIcon(icons.get(iconCounter)));
                 iconCounter++;
 
                 button.addItemListener(new ItemListener() {
@@ -77,6 +78,9 @@ public class Controller {
                                     if (model.getToGuess() == 0) {
                                         System.out.println("Gratuluję!!! Wygrałeś!!!");
                                     }
+                                    //disable buttons
+                                    disableGuesssedButtons();
+
                                     model.resetCounter();
                                     model.getSelectedTile1().setReference(null);
                                     model.getSelectedTile2().setReference(null);
@@ -135,5 +139,13 @@ public class Controller {
 
         button1.setSelected(false);
         button2.setSelected(false);
+    }
+
+    public void disableGuesssedButtons() {
+        JToggleButton button1 = (JToggleButton)model.getSelectedTile1().getReference();
+        JToggleButton button2 = (JToggleButton)model.getSelectedTile2().getReference();
+
+        button1.setEnabled(false);
+        button2.setEnabled(false);
     }
 }
