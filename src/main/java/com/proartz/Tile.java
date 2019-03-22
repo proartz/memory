@@ -3,7 +3,6 @@ package com.proartz;
 public class Tile {
     private boolean guessed;
     private boolean selected;
-    private Object reference;
 
     public Tile() {
         this(null);
@@ -12,7 +11,6 @@ public class Tile {
     public Tile(Object reference) {
         guessed = false;
         selected = false;
-        this.reference = reference;
     }
 
     public boolean isGuessed() {
@@ -29,13 +27,5 @@ public class Tile {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
-    }
-
-    public Object getReference() {
-        return reference;
-    }
-
-    public void setReference(Object reference) {
-        this.reference = reference;
     }
 }

@@ -42,8 +42,4 @@ public class Board {
     public Tile getTile(int rowNumber, int columnNumber) {
         return board[rowNumber][columnNumber];
     }
-
-    public void bindTile(int rowNumber, int columnNumber, Object tile) {
-        board[rowNumber][columnNumber].setReference(tile);
-    }
 }
