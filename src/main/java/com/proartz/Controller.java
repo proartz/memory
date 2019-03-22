@@ -29,12 +29,6 @@ public class Controller {
     }
 
     public void createButtons(int numberOfButtons) {
-        //check is numberOfButtons a square number
-        //so we can have square board(rows == columns)
-        if(((int)Math.sqrt(numberOfButtons) % 1) != 0) {
-            System.err.println("Error: numberOfButtons need to be a square of an integer :(");
-            System.exit(-1);
-        }
 
         int numberOfRows = (int)Math.sqrt(numberOfButtons);
         int numberOfColumns = numberOfRows;

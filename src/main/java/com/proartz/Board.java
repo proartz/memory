@@ -15,12 +15,7 @@ public class Board {
     }
 
     private void initializeBoard() {
-        //check is numberOfButtons a square number
-        //so we can have square board(rows == columns)
-        if(((int)Math.sqrt(numberOfTiles) % 1) != 0) {
-            System.err.println("Error: numberOfTiles need to be a square of an integer :(");
-            System.exit(-1);
-        }
+
         int numbersOfRows = (int)Math.sqrt(numberOfTiles);
 
         // create a table of a tables
