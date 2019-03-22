@@ -1,31 +1,31 @@
 package com.proartz;
 
-public class Model<T> {
+import java.util.ArrayList;
+
+public class Model {
     private int selectionCounter;
     private int numberOfTiles;
     private int toGuess;
-    private Board board;
-
-    private Tile selectedTile1, selectedTile2;
+    private ArrayList<Tile> tiles;
+    private Tile[] selectedTiles;
 
     public Model() {
         selectionCounter = 0;
         numberOfTiles = 16;
         toGuess = numberOfTiles / 2;
-        board = new Board(numberOfTiles);
-        selectedTile1 = new Tile(null);
-        selectedTile2 = new Tile(null);
+        tiles = new ArrayList<>();
+        selectedTiles = new Tile[2];
     }
 
-    public Board getBoard() {
-        return board;
+    public void addTile(String value) {
+        tiles.add(new Tile(value));
     }
 
-    public void incrementCounter() {
+    public void incrementSelectionCounter() {
         selectionCounter++;
     }
 
-    public void resetCounter() {
+    public void resetSelectionCounter() {
         selectionCounter = 0;
     }
 
@@ -41,20 +41,16 @@ public class Model<T> {
         return numberOfTiles;
     }
 
-    public Tile getSelectedTile1() {
-        return selectedTile1;
+    public Tile getTile(int indexOfTile) {
+        return tiles.get(indexOfTile);
     }
 
-    public void setSelectedTile1(Tile selectedTile1) {
-        this.selectedTile1 = selectedTile1;
+    public void selectTile(int tileNumber) {
+        tiles.get(tileNumber).setSelected(true);
     }
 
-    public Tile getSelectedTile2() {
-        return selectedTile2;
-    }
-
-    public void setSelectedTile2(Tile selectedTile2) {
-        this.selectedTile2 = selectedTile2;
+    public void saveSelectedTile(int tileNumber, Tile selectedTile) {
+        selectedTiles[tileNumber - 1] = selectedTile;
     }
 
     public void decrementToGuess() {
@@ -65,7 +61,25 @@ public class Model<T> {
         return toGuess;
     }
 
-    public void setToGuess(int toGuess) {
-        this.toGuess = toGuess;
+    public boolean compareSelectedTiles() {
+        String value1 = selectedTiles[0].getValue();
+        String value2 = selectedTiles[1].getValue();
+
+        return value1.equals(value2);
+    }
+
+    public void setSelectedTilesToGuessed() {
+        selectedTiles[0].setGuessed(true);
+        selectedTiles[1].setGuessed(true);
+    }
+
+    public void resetSelectedTiles() {
+        selectedTiles[0] = null;
+        selectedTiles[1] = null;
+    }
+
+    public void deselectSelectedTiles() {
+        selectedTiles[0].setSelected(false);
+        selectedTiles[1].setSelected(false);
     }
 }

@@ -3,29 +3,23 @@ package com.proartz;
 public class Tile {
     private boolean guessed;
     private boolean selected;
+    private String value;
 
-    public Tile() {
-        this(null);
-    }
-
-    public Tile(Object reference) {
+    public Tile(String value) {
         guessed = false;
         selected = false;
-    }
-
-    public boolean isGuessed() {
-        return guessed;
+        this.value = value;
     }
 
     public void setGuessed(boolean guessed) {
         this.guessed = guessed;
     }
 
-    public boolean isSelected() {
-        return selected;
-    }
-
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public String getValue() {
+        return value;
     }
 }
