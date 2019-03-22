@@ -10,7 +10,7 @@ public class Model<T> {
 
     public Model() {
         selectionCounter = 0;
-        numberOfTiles = 64;
+        numberOfTiles = 16;
         toGuess = numberOfTiles / 2;
         board = new Board(numberOfTiles);
         selectedTile1 = new Tile(null);
