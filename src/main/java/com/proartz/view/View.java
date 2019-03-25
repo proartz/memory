@@ -1,4 +1,6 @@
-package com.proartz;
+package com.proartz.view;
+
+import com.proartz.controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;

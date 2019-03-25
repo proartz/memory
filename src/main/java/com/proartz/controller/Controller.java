@@ -1,7 +1,12 @@
-package com.proartz;
+package com.proartz.controller;
+
+import com.proartz.model.Model;
+import com.proartz.model.Tile;
+import com.proartz.view.View;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class Controller {
@@ -32,7 +37,7 @@ public class Controller {
     public void createTiles() {
         for(int i = 0; i < numberOfTiles; i++) {
             model.addTile(icons.get(i));
-            view.addTile(icons.get(i));
+            view.addTile("images/" + icons.get(i));
         }
     }
 
@@ -88,14 +93,28 @@ public class Controller {
         String dirName = "images/";
 
         File fileName = new File(dirName);
-        File[] fileList = fileName.listFiles();
 
-        for (int i = 0; i < numberOfIcons; i++) {
-
-            //add icon twice
-            icons.add(fileList[i].toString());
-            icons.add(fileList[i].toString());
+        if(!fileName.isDirectory()) {
+            System.err.format("Error: %s is not a directory%n", dirName);
+            System.exit(-1);
         }
+
+        String[] fileList = fileName.list();
+
+        //convert an array to an ArrayList
+        ArrayList<String> temp = new ArrayList<>(Arrays.asList(fileList));
+        Collections.sort(temp);
+
+        //remove the last/cover icon
+        temp.remove(temp.size() - 1);
+
+        Collections.shuffle(temp);
+
+        //add "numberOfIcons" needed to an icons list
+        icons.addAll(temp.subList(0, numberOfIcons));
+
+        //duplicate all elements
+        icons.addAll((ArrayList<String>)icons.clone());
         Collections.shuffle(icons);
 
         return icons;

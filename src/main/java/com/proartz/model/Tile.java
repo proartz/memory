@@ -1,4 +1,4 @@
-package com.proartz;
+package com.proartz.model;
 
 public class Tile {
     private boolean guessed;

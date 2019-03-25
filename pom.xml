@@ -22,7 +22,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>com.proartz.App</mainClass>
+              <mainClass>com.proartz.controller.App</mainClass>
             </manifest>
           </archive>
         </configuration>
