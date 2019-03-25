@@ -74,13 +74,25 @@ public class View {
         selectedButton[numberOfButton - 1] = (JToggleButton) source;
     }
 
+    public JToggleButton getSelectedButton(int index) {
+        return selectedButton[index - 1];
+    }
+
     public void resetSelectedButtons() {
         selectedButton[0] = selectedButton[1] = null;
     }
 
     public void disableSelectedButtons() {
         selectedButton[0].setEnabled(false);
-        selectedButton[1].setEnabled(false);
+        if(selectedButton[1] != null) {
+            selectedButton[1].setEnabled(false);
+        }
+    }
+
+
+    public void enableSelectedTiles() {
+        selectedButton[0].setEnabled(true);
+        selectedButton[1].setEnabled(true);
     }
     public void deselectSelectedButtons() {
         selectedButton[0].setSelected(false);

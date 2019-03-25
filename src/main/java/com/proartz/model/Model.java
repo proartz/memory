@@ -17,8 +17,8 @@ public class Model {
         selectedTiles = new Tile[2];
     }
 
-    public void addTile(String value) {
-        tiles.add(new Tile(value));
+    public void addTile(int index, String value) {
+        tiles.add(new Tile(index, value));
     }
 
     public void incrementSelectionCounter() {
@@ -81,5 +81,9 @@ public class Model {
     public void deselectSelectedTiles() {
         selectedTiles[0].setSelected(false);
         selectedTiles[1].setSelected(false);
+    }
+
+    public int getSelectedTileIndex(int tileNumber) {
+        return selectedTiles[tileNumber - 1].getIndex();
     }
 }

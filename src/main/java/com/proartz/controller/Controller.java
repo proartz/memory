@@ -13,8 +13,7 @@ public class Controller {
     private Model model;
     int numberOfTiles;
     private View view;
-    private ArrayList<Integer> tiles;
-    ArrayList<String> icons;
+    private ArrayList<String> icons;
 
     public Controller(Model model, View view) {
         this.model = model;
@@ -23,7 +22,6 @@ public class Controller {
         view.setNumberOfTiles(numberOfTiles);
         view.setController(this);
         view.initializeView();
-        tiles = new ArrayList<>();
         icons = loadIcons(numberOfTiles / 2);
     }
 
@@ -36,7 +34,7 @@ public class Controller {
 
     public void createTiles() {
         for(int i = 0; i < numberOfTiles; i++) {
-            model.addTile(icons.get(i));
+            model.addTile(i, icons.get(i));
             view.addTile("images/" + icons.get(i));
         }
     }
@@ -47,16 +45,27 @@ public class Controller {
         model.selectTile(indexOfTile);
 
         if (model.getSelectionCounter() == 0) {
+
+            //if it is a first and only tile pressed
             model.saveSelectedTile(1, selectedTile);
             model.incrementSelectionCounter();
 
             view.saveSelectedButton(1, source);
-        } else if (model.getSelectionCounter() == 1) {
+            view.disableSelectedButtons();
+
+        } else if ((model.getSelectionCounter() == 1) &&
+                   (model.getSelectedTileIndex(1) != indexOfTile)){
+
+            //if it's the second tile pressed and not the same one as first
+
             model.saveSelectedTile(2, selectedTile);
             model.incrementSelectionCounter();
             view.saveSelectedButton(2, source);
+            view.disableSelectedButtons();
 
             if (model.compareSelectedTiles()) {
+
+                //if the same picture has been uncovered
                 model.decrementToGuess();
 
                 if (model.getToGuess() == 0) {
@@ -67,7 +76,7 @@ public class Controller {
                 model.setSelectedTilesToGuessed();
                 model.resetSelectedTiles();
 
-                view.disableSelectedButtons();
+
 
                 model.resetSelectionCounter();
 
@@ -75,6 +84,7 @@ public class Controller {
             }
         } else if (model.getSelectionCounter() == 2) {
             //not guessed
+            view.enableSelectedTiles();
             model.deselectSelectedTiles();
             model.resetSelectedTiles();
 
@@ -83,6 +93,7 @@ public class Controller {
 
             model.setSelectionCounter(1);
             view.saveSelectedButton(1, source);
+            view.disableSelectedButtons();
             model.saveSelectedTile(1, selectedTile);
         }
     }
