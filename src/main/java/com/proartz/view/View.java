@@ -42,10 +42,10 @@ public class View {
         this.controller = controller;
     }
 
-    public void addTile(String image) {
+    public void addTile(String image, String coverImage) {
         // set-uo the button
         JToggleButton button = new JToggleButton();
-        button.setIcon(new ImageIcon("images/037-ufo-flying.png"));
+        button.setIcon(new ImageIcon(coverImage));
         button.setSelectedIcon(new ImageIcon(image));
         button.setDisabledSelectedIcon(new ImageIcon(image));
         button.addItemListener(new ItemListener() {
@@ -64,6 +64,12 @@ public class View {
     public void showFrame() {
         frame.pack();
         frame.setVisible(true);
+    }
+
+    public void showMessage(String message, String title, String image) {
+        JOptionPane.showMessageDialog(frame, message, title,
+                JOptionPane.INFORMATION_MESSAGE,
+                new ImageIcon(image));
     }
 
     public int getIndexOfButton(Object source) {
@@ -88,7 +94,6 @@ public class View {
             selectedButton[1].setEnabled(false);
         }
     }
-
 
     public void enableSelectedTiles() {
         selectedButton[0].setEnabled(true);

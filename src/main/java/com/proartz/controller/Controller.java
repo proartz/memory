@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class Controller {
+    private static final String IMAGES_DIR = "images/";
+    private static final String FINAL_ICON = "006-outer-space-alien.png";
+    private static final String COVER_ICON = "037-ufo-flying.png";
     private Model model;
     int numberOfTiles;
     private View view;
@@ -22,6 +25,7 @@ public class Controller {
         view.setNumberOfTiles(numberOfTiles);
         view.setController(this);
         view.initializeView();
+
         icons = loadIcons(numberOfTiles / 2);
     }
 
@@ -35,7 +39,8 @@ public class Controller {
     public void createTiles() {
         for(int i = 0; i < numberOfTiles; i++) {
             model.addTile(i, icons.get(i));
-            view.addTile("images/" + icons.get(i));
+            view.addTile(IMAGES_DIR + icons.get(i),
+                    IMAGES_DIR + COVER_ICON);
         }
     }
 
@@ -43,6 +48,7 @@ public class Controller {
         int indexOfTile = view.getIndexOfButton(source);
         Tile selectedTile = model.getTile(indexOfTile);
         model.selectTile(indexOfTile);
+        model.incrementClickCounter();
 
         if (model.getSelectionCounter() == 0) {
 
@@ -53,9 +59,7 @@ public class Controller {
             view.saveSelectedButton(1, source);
             view.disableSelectedButtons();
 
-        } else if ((model.getSelectionCounter() == 1) &&
-                   (model.getSelectedTileIndex(1) != indexOfTile)){
-
+        } else if (model.getSelectionCounter() == 1) {
             //if it's the second tile pressed and not the same one as first
 
             model.saveSelectedTile(2, selectedTile);
@@ -66,17 +70,15 @@ public class Controller {
             if (model.compareSelectedTiles()) {
 
                 //if the same picture has been uncovered
+                model.setSelectedTilesToGuessed();
                 model.decrementToGuess();
 
                 if (model.getToGuess() == 0) {
-                    System.out.println("Gratuluję!!! Wygrałeś!!!");
+                    showFinalDialog();
                 }
 
-                //disable buttons
                 model.setSelectedTilesToGuessed();
                 model.resetSelectedTiles();
-
-
 
                 model.resetSelectionCounter();
 
@@ -98,10 +100,20 @@ public class Controller {
         }
     }
 
+    private void showFinalDialog() {
+        String message = "Yeah! Ukończyłeś grę w " +
+                model.getClickCounter() +
+                " kliknięć.";
+        String title = "Koniec Gry";
+        String image = IMAGES_DIR + FINAL_ICON;
+        
+        view.showMessage(message, title, image);
+    }
+
     private ArrayList<String> loadIcons(int numberOfIcons) {
         ArrayList<String> icons = new ArrayList<>();
 
-        String dirName = "images/";
+        String dirName = IMAGES_DIR;
 
         File fileName = new File(dirName);
 

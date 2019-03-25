@@ -3,15 +3,22 @@ package com.proartz.model;
 import java.util.ArrayList;
 
 public class Model {
+    private static final int DEFAULT_NUMBER_OF_TILES = 16;
+
     private int selectionCounter;
+    private int clickCounter;
     private int numberOfTiles;
     private int toGuess;
     private ArrayList<Tile> tiles;
     private Tile[] selectedTiles;
 
     public Model() {
+        this(DEFAULT_NUMBER_OF_TILES);
+    }
+
+    public Model(int numberOfTiles) {
         selectionCounter = 0;
-        numberOfTiles = 16;
+        this.numberOfTiles = numberOfTiles;
         toGuess = numberOfTiles / 2;
         tiles = new ArrayList<>();
         selectedTiles = new Tile[2];
@@ -50,6 +57,7 @@ public class Model {
     }
 
     public void saveSelectedTile(int tileNumber, Tile selectedTile) {
+        selectedTile.setSelected(true);
         selectedTiles[tileNumber - 1] = selectedTile;
     }
 
@@ -74,7 +82,10 @@ public class Model {
     }
 
     public void resetSelectedTiles() {
+        selectedTiles[0].setSelected(false);
         selectedTiles[0] = null;
+
+        selectedTiles[1].setSelected(false);
         selectedTiles[1] = null;
     }
 
@@ -85,5 +96,13 @@ public class Model {
 
     public int getSelectedTileIndex(int tileNumber) {
         return selectedTiles[tileNumber - 1].getIndex();
+    }
+
+    public void incrementClickCounter() {
+        clickCounter++;
+    }
+
+    public int getClickCounter() {
+        return clickCounter;
     }
 }
