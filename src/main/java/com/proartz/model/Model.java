@@ -28,6 +28,13 @@ public class Model {
         tiles.add(new Tile(index, value));
     }
 
+    public void restartModel() {
+        selectionCounter = 0;
+        toGuess = numberOfTiles / 2;
+        tiles.clear();
+        clearSelectedTiles();
+    }
+
     public void incrementSelectionCounter() {
         selectionCounter++;
     }
@@ -83,9 +90,13 @@ public class Model {
 
     public void resetSelectedTiles() {
         selectedTiles[0].setSelected(false);
-        selectedTiles[0] = null;
-
         selectedTiles[1].setSelected(false);
+
+        clearSelectedTiles();
+    }
+
+    public void clearSelectedTiles() {
+        selectedTiles[0] = null;
         selectedTiles[1] = null;
     }
 

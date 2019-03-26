@@ -21,18 +21,20 @@ public class Controller {
     public Controller(Model model, View view) {
         this.model = model;
         this.view = view;
+    }
+
+    public void createAndShowGUI() {
         numberOfTiles = model.getNumberOfTiles();
+
         view.setNumberOfTiles(numberOfTiles);
+        view.setFrameTitle("Memory");
         view.setController(this);
         view.initializeView();
 
         icons = loadIcons(numberOfTiles / 2);
-    }
-
-    public void createAndShowGUI() {
-        int numberOfTiles = model.getNumberOfTiles();
 
         createTiles();
+
         view.showFrame();
     }
 
@@ -142,4 +144,15 @@ public class Controller {
 
         return icons;
     }
+
+    public void endGame() {
+        System.exit(1);
+    }
+
+    public void restartGame() {
+        model.restartModel();
+        view.restartView();
+    }
+
+    
 }

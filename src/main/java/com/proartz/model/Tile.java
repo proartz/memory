@@ -13,6 +13,11 @@ public class Tile {
         this.index = index;
     }
 
+    public void restartTile() {
+        guessed = false;
+        selected = false;
+    }
+
     public void setGuessed(boolean guessed) {
         this.guessed = guessed;
     }
