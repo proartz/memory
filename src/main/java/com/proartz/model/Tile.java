@@ -1,25 +1,20 @@
 package com.proartz.model;
 
-public class Tile {
-    private boolean guessed;
+import java.io.Serializable;
+
+public class Tile implements Serializable {
     private boolean selected;
     private int index;
     private String value;
 
     public Tile(int index, String value) {
-        guessed = false;
         selected = false;
         this.value = value;
         this.index = index;
     }
 
     public void restartTile() {
-        guessed = false;
         selected = false;
-    }
-
-    public void setGuessed(boolean guessed) {
-        this.guessed = guessed;
     }
 
     public void setSelected(boolean selected) {
@@ -30,7 +25,24 @@ public class Tile {
         return value;
     }
 
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     public int getIndex() {
         return index;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    @Override
+    public String toString() {
+        return "Tile{" +
+                "selected=" + selected +
+                ", index=" + index +
+                ", value='" + value + '\'' +
+                '}';
     }
 }

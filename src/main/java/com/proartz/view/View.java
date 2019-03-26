@@ -17,25 +17,24 @@ public class View {
     private JMenu menu;
     private JMenuItem newGame, saveGame, endGame;
     private ArrayList<JToggleButton> buttons;
-    private JToggleButton[] selectedButton;
+    private JToggleButton[] selectedButtons;
     private Controller controller;
     private ActionListener actionListener;
 
-    public View() {
+    public View(int numberOfTiles, String frameTitle, Controller controller) {
+        this.numberOfTiles = numberOfTiles;
+        this.frameTitle = frameTitle;
+        this.controller = controller;
 
+        initializeView();
     }
 
     public void initializeView(){
-        initializeButtons();
         initializeContentPane();
+        initializeButtons();
         initializeActionListener();
         initializeMenu();
         initializeFrame();
-    }
-
-    private void initializeButtons() {
-        buttons = new ArrayList<>();
-        selectedButton = new JToggleButton[2];
     }
 
     private void initializeContentPane() {
@@ -46,17 +45,39 @@ public class View {
         contentPane.setOpaque(true);
     }
 
+    private void initializeButtons() {
+        buttons = new ArrayList<>();
+        for(int i = 0; i < numberOfTiles; i++) {
+            // set-uo the button
+            JToggleButton button = new JToggleButton();
+
+            button.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    Object source = e.getItemSelectable();
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+                        controller.tilePressed(source);
+                    }
+                }});
+
+            buttons.add(button);
+            contentPane.add(button);
+        }
+        selectedButtons = new JToggleButton[2];
+    }
+
     public void initializeActionListener() {
         actionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if ("restart".equals(e.getActionCommand())) {
                     //restart the game
-                    controller.restartGame();
+                    controller.actions("restart");
                 } else if ("save".equals(e.getActionCommand())) {
                     //save the game
+                    controller.actions("save");
                 } else if ("end".equals(e.getActionCommand())) {
-                    controller.endGame();
+                    controller.actions("end");
                 }
             }
         };
@@ -95,31 +116,12 @@ public class View {
         frame.setJMenuBar(menuBar);
     }
 
-    public void setController(Controller controller) {
-        this.controller = controller;
-    }
+    public void setTileIcon(int tileNumber, String image, String coverImage) {
+        JToggleButton button = buttons.get(tileNumber);
 
-    public void addTile(String image, String coverImage) {
-        // set-uo the button
-        JToggleButton button = new JToggleButton();
         button.setIcon(new ImageIcon(coverImage));
-        button.setSelectedIcon(new ImageIcon(image));
-        button.setDisabledSelectedIcon(new ImageIcon(image));
-        button.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                Object source = e.getItemSelectable();
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    controller.tilePressed(source);
-                }
-            }});
-
-        buttons.add(button);
-        contentPane.add(button);
-    }
-
-    public void restartView() {
-        
+        button.setPressedIcon(new ImageIcon(image));
+        button.setDisabledIcon(new ImageIcon(image));
     }
 
     public void showFrame() {
@@ -133,28 +135,28 @@ public class View {
                 new ImageIcon(image));
     }
 
-    public void saveSelectedButton(int numberOfButton, Object source) {
-        selectedButton[numberOfButton - 1] = (JToggleButton) source;
+    public void saveSelectedButton(int numberOfButton, int tileNumber) {
+        selectedButtons[numberOfButton - 1] = buttons.get(tileNumber);
     }
 
-    public void resetSelectedButtons() {
-        selectedButton[0] = selectedButton[1] = null;
+    public void clearSelectedButtons() {
+        selectedButtons[0] = selectedButtons[1] = null;
     }
 
     public void disableSelectedButtons() {
-        selectedButton[0].setEnabled(false);
-        if(selectedButton[1] != null) {
-            selectedButton[1].setEnabled(false);
+        selectedButtons[0].setEnabled(false);
+        if(selectedButtons[1] != null) {
+            selectedButtons[1].setEnabled(false);
         }
     }
 
     public void enableSelectedTiles() {
-        selectedButton[0].setEnabled(true);
-        selectedButton[1].setEnabled(true);
+        selectedButtons[0].setEnabled(true);
+        selectedButtons[1].setEnabled(true);
     }
     public void deselectSelectedButtons() {
-        selectedButton[0].setSelected(false);
-        selectedButton[1].setSelected(false);
+        selectedButtons[0].setSelected(false);
+        selectedButtons[1].setSelected(false);
     }
 
     public int getIndexOfButton(Object source) {
@@ -162,14 +164,23 @@ public class View {
     }
 
     public JToggleButton getSelectedButton(int index) {
-        return selectedButton[index - 1];
+        return selectedButtons[index - 1];
     }
 
-    public void setNumberOfTiles(int numberOfTiles) {
-        this.numberOfTiles = numberOfTiles;
+    public void setTileState(int tileNumber, boolean selected) {
+        JToggleButton button = buttons.get(tileNumber);
+        
+        button.setEnabled(!selected);
+        button.setSelected(selected);
+
     }
 
-    public void setFrameTitle(String frameTitle) {
-        this.frameTitle = frameTitle;
+    public void setSelectedButton(int tileNumber, boolean selected) {
+        selectedButtons[tileNumber - 1].setEnabled(!selected);
+        selectedButtons[tileNumber - 1].setSelected(selected);
+    }
+
+    public void clearSelectedButton(int tileNumber) {
+        selectedButtons[tileNumber - 1] = null;
     }
 }

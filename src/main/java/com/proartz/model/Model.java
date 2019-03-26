@@ -1,9 +1,9 @@
 package com.proartz.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Model {
-    private static final int DEFAULT_NUMBER_OF_TILES = 16;
+public class Model implements Serializable {
 
     private int selectionCounter;
     private int clickCounter;
@@ -11,10 +11,6 @@ public class Model {
     private int toGuess;
     private ArrayList<Tile> tiles;
     private Tile[] selectedTiles;
-
-    public Model() {
-        this(DEFAULT_NUMBER_OF_TILES);
-    }
 
     public Model(int numberOfTiles) {
         selectionCounter = 0;
@@ -31,8 +27,14 @@ public class Model {
     public void restartModel() {
         selectionCounter = 0;
         toGuess = numberOfTiles / 2;
-        tiles.clear();
         clearSelectedTiles();
+        deselectAllTiles();
+    }
+
+    private void deselectAllTiles() {
+        for (Tile tile : tiles) {
+            tile.setSelected(false);
+        }
     }
 
     public void incrementSelectionCounter() {
@@ -83,11 +85,6 @@ public class Model {
         return value1.equals(value2);
     }
 
-    public void setSelectedTilesToGuessed() {
-        selectedTiles[0].setGuessed(true);
-        selectedTiles[1].setGuessed(true);
-    }
-
     public void resetSelectedTiles() {
         selectedTiles[0].setSelected(false);
         selectedTiles[1].setSelected(false);
@@ -109,11 +106,30 @@ public class Model {
         return selectedTiles[tileNumber - 1].getIndex();
     }
 
+    public Tile getSelectedTile(int tileNumber) {
+        return selectedTiles[tileNumber];
+    }
+
     public void incrementClickCounter() {
         clickCounter++;
     }
 
     public int getClickCounter() {
         return clickCounter;
+    }
+
+    public ArrayList<Tile> getTiles() {
+        return tiles;
+    }
+
+    public void showModel() {
+        for (Tile tile : tiles) {
+            System.out.println(tile);
+        }
+        System.out.println();
+        for(Tile tile : selectedTiles) {
+            System.out.println(tile);
+        }
+        System.out.println();
     }
 }
