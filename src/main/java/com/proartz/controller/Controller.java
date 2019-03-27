@@ -79,6 +79,7 @@ public class Controller {
             if(tile == null) {
                 view.clearSelectedButton(i + 1);
             } else {
+                view.saveSelectedButton(i + 1, tile.getIndex());
                 view.setSelectedButton(i + 1, tile.isSelected());
             }
         }

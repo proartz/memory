@@ -169,7 +169,7 @@ public class View {
 
     public void setTileState(int tileNumber, boolean selected) {
         JToggleButton button = buttons.get(tileNumber);
-        
+
         button.setEnabled(!selected);
         button.setSelected(selected);
 
