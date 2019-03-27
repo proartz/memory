@@ -183,4 +183,11 @@ public class View {
     public void clearSelectedButton(int tileNumber) {
         selectedButtons[tileNumber - 1] = null;
     }
+
+    public void showSelectedButtons(){
+        System.out.println("view.selectedButtons:");
+        for(JToggleButton button : selectedButtons) {
+            System.out.println(button);
+        }
+    }
 }

@@ -50,9 +50,11 @@ public class Controller {
             createTiles();
         }
         model.showModel();
+
         disableTilePress = true;
         loadModelToView();
         disableTilePress = false;
+        view.showSelectedButtons();
 
         view.showFrame();
     }
@@ -75,7 +77,7 @@ public class Controller {
             view.setTileState(i, tile.isSelected());
         }
         for(int i = 0; i < 2; i++){
-            Tile tile = model.getSelectedTile(1);
+            Tile tile = model.getSelectedTile(i);
             if(tile == null) {
                 view.clearSelectedButton(i + 1);
             } else {
@@ -141,6 +143,7 @@ public class Controller {
             model.saveSelectedTile(1, selectedTile);
         }
         model.showModel();
+        view.showSelectedButtons();
     }
 
     private void showFinalDialog() {
