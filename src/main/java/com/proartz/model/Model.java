@@ -26,6 +26,7 @@ public class Model implements Serializable {
 
     public void restartModel() {
         selectionCounter = 0;
+        clickCounter = 0;
         toGuess = numberOfTiles / 2;
         clearSelectedTiles();
         deselectAllTiles();
