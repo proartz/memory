@@ -86,13 +86,6 @@ public class Model implements Serializable {
         return value1.equals(value2);
     }
 
-    public void resetSelectedTiles() {
-        selectedTiles[0].setSelected(false);
-        selectedTiles[1].setSelected(false);
-
-        clearSelectedTiles();
-    }
-
     public void clearSelectedTiles() {
         selectedTiles[0] = null;
         selectedTiles[1] = null;
@@ -101,10 +94,6 @@ public class Model implements Serializable {
     public void deselectSelectedTiles() {
         selectedTiles[0].setSelected(false);
         selectedTiles[1].setSelected(false);
-    }
-
-    public int getSelectedTileIndex(int tileNumber) {
-        return selectedTiles[tileNumber - 1].getIndex();
     }
 
     public Tile getSelectedTile(int tileNumber) {
@@ -117,10 +106,6 @@ public class Model implements Serializable {
 
     public int getClickCounter() {
         return clickCounter;
-    }
-
-    public ArrayList<Tile> getTiles() {
-        return tiles;
     }
 
     public void showModel() {
