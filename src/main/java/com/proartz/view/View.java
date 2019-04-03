@@ -14,8 +14,6 @@ public class View {
     private JFrame frame;
     private JPanel contentPane;
     private JMenuBar menuBar;
-    private JMenu menu;
-    private JMenuItem newGame, saveGame, endGame;
     private ArrayList<JToggleButton> buttons;
     private JToggleButton[] selectedButtons;
     private Controller controller;
@@ -29,7 +27,7 @@ public class View {
         initializeView();
     }
 
-    public void initializeView(){
+    private void initializeView(){
         initializeContentPane();
         initializeButtons();
         initializeActionListener();
@@ -66,7 +64,7 @@ public class View {
         selectedButtons = new JToggleButton[2];
     }
 
-    public void initializeActionListener() {
+    private void initializeActionListener() {
         actionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,24 +83,24 @@ public class View {
     private void initializeMenu() {
         menuBar = new JMenuBar();
 
-        menu = new JMenu("Gra");
+        JMenu menu = new JMenu("Gra");
         menu.setMnemonic(KeyEvent.VK_G);
         menuBar.add(menu);
 
-        newGame = new JMenuItem("Nowa Gra",
+        JMenuItem newGame = new JMenuItem("Nowa Gra",
                 KeyEvent.VK_N);
         newGame.setActionCommand("restart");
         newGame.addActionListener(actionListener);
         menu.add(newGame);
 
-        saveGame = new JMenuItem("Zapisz grę",
+        JMenuItem saveGame = new JMenuItem("Zapisz grę",
                 KeyEvent.VK_S);
         saveGame.setActionCommand("save");
         saveGame.addActionListener(actionListener);
         menu.add(saveGame);
         menu.addSeparator();
 
-        endGame = new JMenuItem("Zakończ",
+        JMenuItem endGame = new JMenuItem("Zakończ",
                 KeyEvent.VK_Z);
         endGame.setActionCommand("end");
         endGame.addActionListener(actionListener);
@@ -110,7 +108,7 @@ public class View {
     }
 
     private void initializeFrame() {
-        frame = new JFrame("Testing Buttons");
+        frame = new JFrame(frameTitle);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(contentPane);
         frame.setJMenuBar(menuBar);
@@ -160,11 +158,8 @@ public class View {
     }
 
     public int getIndexOfButton(Object source) {
-        return buttons.indexOf(source);
-    }
-
-    public JToggleButton getSelectedButton(int index) {
-        return selectedButtons[index - 1];
+        JToggleButton button = (JToggleButton) source;
+        return buttons.indexOf(button);
     }
 
     public void setTileState(int tileNumber, boolean selected) {
