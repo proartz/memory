@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.Properties;
 
 public class Controller {
-    private static final int DEFAULT_NUMBER_OF_TILES = 16;
     private static final String IMAGES_DIR = "images/";
     private static final String FINAL_ICON = "006-outer-space-alien.png";
     private static final String COVER_ICON = "037-ufo-flying.png";
@@ -24,22 +23,22 @@ public class Controller {
     private static final String APPLICATION_PROPERTIES_FILE = "application_properties";
 
     private Model model;
-    int numberOfTiles;
+    private int numberOfTiles;
     private View view;
     private ArrayList<String> icons;
-    boolean loadedGame;
+    private boolean loadedGame;
     private boolean disableTilePress = false;
     private Properties defaultProps = new Properties();
     private Properties applicationProps = new Properties();
 
-    public Controller() {
+    Controller() {
 
         //check do we have saved game
         Path dataFile = Paths.get(DATA_FILE);
 
         if(Files.exists(dataFile)) {
             loadedGame = true;
-            model = loadGame(DATA_FILE);
+            model = loadGame();
             numberOfTiles = model.getNumberOfTiles();
         } else {
             loadedGame = false;
@@ -65,7 +64,7 @@ public class Controller {
         }
     }
 
-    public void startGame() {
+    void startGame() {
         if(!loadedGame) {
             createTiles();
         }
@@ -79,17 +78,17 @@ public class Controller {
         view.showFrame();
     }
 
-    public void initializeIcons() {
+    private void initializeIcons() {
         icons = loadIcons(numberOfTiles / 2);
     }
 
-    public void createTiles() {
+    private void createTiles() {
         for(int i = 0; i < numberOfTiles; i++) {
             model.addTile(i, icons.get(i));
         }
     }
 
-    public void loadModelToView() {
+    private void loadModelToView() {
         for(int i = 0; i < numberOfTiles; i++) {
             Tile tile = model.getTile(i);
             String image = tile.getValue();
@@ -177,7 +176,6 @@ public class Controller {
     }
 
     private ArrayList<String> loadIcons(int numberOfIcons) {
-        ArrayList<String> icons = new ArrayList<>();
 
         String dirName = IMAGES_DIR;
 
@@ -191,7 +189,12 @@ public class Controller {
         String[] fileList = fileName.list();
 
         //convert an array to an ArrayList
+        if(fileList == null) {
+            System.err.println("Error: Problems with icons directory");
+            System.exit(-1);
+        }
         ArrayList<String> temp = new ArrayList<>(Arrays.asList(fileList));
+
         Collections.sort(temp);
 
         //remove the last/cover icon
@@ -200,18 +203,19 @@ public class Controller {
         Collections.shuffle(temp);
 
         //add "numberOfIcons" needed to an icons list
-        icons.addAll(temp.subList(0, numberOfIcons));
+        ArrayList<String> icons = new ArrayList<>(temp.subList(0, numberOfIcons));
 
         //duplicate all elements
-        icons.addAll((ArrayList<String>)icons.clone());
+        ArrayList<String> iconsCopy = new ArrayList<>(icons);
+        icons.addAll(iconsCopy);
         Collections.shuffle(icons);
 
         return icons;
     }
 
-    public void endGame() {
+    private void endGame() {
         if(model.getToGuess() != 0) {
-            saveGame(DATA_FILE);
+            saveGame();
         }
 
         saveProperties();
@@ -219,23 +223,23 @@ public class Controller {
         System.exit(1);
     }
 
-    public void restartGame() {
+    private void restartGame() {
         initializeIcons();
         model.restartModel();
         loadValuesToModel();
         loadModelToView();
     }
 
-    public void loadValuesToModel() {
+    private void loadValuesToModel() {
         for(int i = 0; i < numberOfTiles; i++) {
             Tile tile = model.getTile(i);
             String value = icons.get(i);
             tile.setValue(value);
         }
     }
-    public void saveGame(String dataFile) {
+    private void saveGame() {
         try (ObjectOutputStream out = new ObjectOutputStream(new
-                    BufferedOutputStream(new FileOutputStream(dataFile)))) {
+                    BufferedOutputStream(new FileOutputStream(DATA_FILE)))) {
 
             out.writeObject(model);
         } catch (IOException e) {
@@ -243,17 +247,15 @@ public class Controller {
         }
     }
 
-    public Model loadGame(String dataFile) {
+    private Model loadGame() {
         Model savedGame = null;
 
         try (ObjectInputStream in = new ObjectInputStream(new
-                    BufferedInputStream(new FileInputStream(dataFile)))) {
+                    BufferedInputStream(new FileInputStream(DATA_FILE)))) {
 
             savedGame = (Model)in.readObject();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -261,16 +263,20 @@ public class Controller {
     }
 
     public void actions(String action) {
-        if(action.equals("restart")) {
-            restartGame();
-        } else if(action.equals("save")) {
-            saveGame(DATA_FILE);
-        } else if (action.equals("end")) {
-            endGame();
+        switch (action) {
+            case "restart":
+                restartGame();
+                break;
+            case "save":
+                saveGame();
+                break;
+            case "end":
+                endGame();
+                break;
         }
     }
 
-    public void saveProperties() {
+    private void saveProperties() {
         applicationProps.setProperty("numberOfTiles", Integer.toString(numberOfTiles));
 
         try(FileOutputStream out = new FileOutputStream(APPLICATION_PROPERTIES_FILE)) {
@@ -280,7 +286,7 @@ public class Controller {
         }
     }
 
-    public void loadProperties() {
+    private void loadProperties() {
         try(FileInputStream in = new FileInputStream(DEFAULT_PROPERTIES_FILE)) {
             defaultProps.load(in);
         } catch (IOException e) {
