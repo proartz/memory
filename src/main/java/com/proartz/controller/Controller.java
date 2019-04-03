@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Properties;
 
 public class Controller {
     private static final int DEFAULT_NUMBER_OF_TILES = 16;
@@ -19,6 +20,8 @@ public class Controller {
     private static final String COVER_ICON = "037-ufo-flying.png";
     private static final String DATA_FILE = "save.dat";
     private static final String GAME_TITLE = "Memory";
+    private static final String DEFAULT_PROPERTIES_FILE = "default_properties";
+
     private Model model;
     int numberOfTiles;
     private View view;
@@ -193,6 +196,9 @@ public class Controller {
         if(model.getToGuess() != 0) {
             saveGame(DATA_FILE);
         }
+
+        saveProperties();
+
         System.exit(1);
     }
 
@@ -246,4 +252,17 @@ public class Controller {
             endGame();
         }
     }
+
+    public void saveProperties(){
+        Properties defaultProps = new Properties();
+        defaultProps.setProperty("numberOfTiles", Integer.toString(numberOfTiles));
+
+        try(FileOutputStream out = new FileOutputStream(DEFAULT_PROPERTIES_FILE)) {
+            defaultProps.store(out, "---No Comment---");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public load
 }
