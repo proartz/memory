@@ -7,17 +7,13 @@ public class Tile implements Serializable {
     private int index;
     private String value;
 
-    public Tile(int index, String value) {
+    Tile(int index, String value) {
         selected = false;
         this.value = value;
         this.index = index;
     }
 
-    public void restartTile() {
-        selected = false;
-    }
-
-    public void setSelected(boolean selected) {
+    void setSelected(boolean selected) {
         this.selected = selected;
     }
 
