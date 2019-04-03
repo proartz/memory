@@ -21,6 +21,7 @@ public class Controller {
     private static final String DATA_FILE = "save.dat";
     private static final String GAME_TITLE = "Memory";
     private static final String DEFAULT_PROPERTIES_FILE = "default_properties";
+    private static final String APPLICATION_PROPERTIES_FILE = "application_properties";
 
     private Model model;
     int numberOfTiles;
@@ -28,6 +29,8 @@ public class Controller {
     private ArrayList<String> icons;
     boolean loadedGame;
     private boolean disableTilePress = false;
+    private Properties defaultProps = new Properties();
+    private Properties applicationProps = new Properties();
 
     public Controller() {
 
@@ -37,15 +40,29 @@ public class Controller {
         if(Files.exists(dataFile)) {
             loadedGame = true;
             model = loadGame(DATA_FILE);
-
+            numberOfTiles = model.getNumberOfTiles();
         } else {
             loadedGame = false;
-            model = new Model(DEFAULT_NUMBER_OF_TILES);
+            loadProperties();
+            setupConfiguration();
+            model = new Model(numberOfTiles);
         }
-        numberOfTiles = model.getNumberOfTiles();
         initializeIcons();
 
         view = new View(numberOfTiles, GAME_TITLE, this);
+    }
+
+    private void setupConfiguration() {
+        if(applicationProps.containsKey("numberOfTiles")) {
+            numberOfTiles = Integer.parseInt(applicationProps.getProperty("numberOfTiles"));
+        } else {
+            numberOfTiles = Integer.parseInt(defaultProps.getProperty("numberOfTiles"));
+        }
+
+        if((numberOfTiles % 2) != 0) {
+            System.err.println("Error: Number of Tiles need to be even.");
+            System.exit(-1);
+        }
     }
 
     public void startGame() {
@@ -253,16 +270,27 @@ public class Controller {
         }
     }
 
-    public void saveProperties(){
-        Properties defaultProps = new Properties();
-        defaultProps.setProperty("numberOfTiles", Integer.toString(numberOfTiles));
+    public void saveProperties() {
+        applicationProps.setProperty("numberOfTiles", Integer.toString(numberOfTiles));
 
-        try(FileOutputStream out = new FileOutputStream(DEFAULT_PROPERTIES_FILE)) {
-            defaultProps.store(out, "---No Comment---");
+        try(FileOutputStream out = new FileOutputStream(APPLICATION_PROPERTIES_FILE)) {
+            applicationProps.store(out, "---No Comment---");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public load
+    public void loadProperties() {
+        try(FileInputStream in = new FileInputStream(DEFAULT_PROPERTIES_FILE)) {
+            defaultProps.load(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try(FileInputStream in = new FileInputStream(APPLICATION_PROPERTIES_FILE)) {
+            applicationProps.load(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
